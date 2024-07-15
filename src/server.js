@@ -7,12 +7,12 @@ const port = process.env.PORT || 5001;
 
 const app = express();
 
-app.use(express.json);
+app.use(express.json ());
 
 app.use("/test", testRouter);
 
 app.get("/health", (req, res) => {
-  resizeBy.status(200).json({ message: "API is healthy" });
+  res.status(200).json({ message: "API is healthy" });
 });
 
 app.listen(port, () => {
