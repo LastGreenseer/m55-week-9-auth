@@ -14,13 +14,14 @@ const isData = async (req, res, next) => {
 // checks if string is lowercase and makes lower
 const isLowerCase = async (req, res, next) => {
   try {
-    let string = req.body.username;
+    req.body.username = req.body.username.toLowerCase();
+//     let string = req.body.username;
 
-    if (string !== string.toLowerCase()) {
-      string = string.toLowerCase();
-    }
+//     if (string !== string.toLowerCase()) {
+//       string = string.toLowerCase();
+//     }
 
-    req.body.username = string;
+//     req.body.username = string;
 
     next()
   } catch (error) {
@@ -29,7 +30,18 @@ const isLowerCase = async (req, res, next) => {
 };
 
 // checks if email is valid using regex
-const isValidEmail = async (req, res, next) => {};
+const isValidEmail = async (req, res, next) => {
+    try {
+
+        const checkEmail = /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,6}$/;
+ 
+
+        if(checkEmail.test(req.body.email)) {
+            res.status(422).json({message: "email not valid"})
+        }
+
+    }
+};
 
 module.exports = {
   isData,
