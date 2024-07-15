@@ -40,6 +40,9 @@ const isValidEmail = async (req, res, next) => {
             res.status(422).json({message: "email not valid"})
         }
 
+        next ()
+    } catch (error){
+        res.status(500).json({ message: error.message, error: error });
     }
 };
 
