@@ -11,6 +11,15 @@ const registerUser = async (req, res) => {
   }
 };
 
+const getUserByUsername = async (req, res) =>{
+  try {
+    const user = await User.findOne ({ where: { username }})
+    return user;
+  }catch (error) {
+    res.status(501).json({ message: error.message, error: error });
+  }
+  }
+
 module.exports = {
   registerUser: registerUser,
 };
