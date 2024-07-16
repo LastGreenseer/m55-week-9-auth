@@ -5,11 +5,20 @@ const registerUser = async (req, res) => {
   try {
     const user = await User.create(req.body);
 
-    res.status(201).json({ message: "success", user: username });
+    res.status(201).json({ message: "success", user: user });
   } catch (error) {
     res.status(501).json({ message: error.message, error: error });
   }
 };
+
+const getUserByUsername = async (req, res) =>{
+  try {
+    const user = await User.findOne ({ where: { username }})
+    return user;
+  }catch (error) {
+    res.status(501).json({ message: error.message, error: error });
+  }
+  }
 
 module.exports = {
   registerUser: registerUser,
