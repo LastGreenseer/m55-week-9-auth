@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const User = require("../user/model")
 // const saltRounds = +process.env.SALT_ROUNDS;
 
 const saltRounds = parseInt(process.env.SALT_ROUNDS);
@@ -40,6 +41,18 @@ const hashPass = async (req, res, next) => {
 //     res.status(500).json()({ message: error.message, error });
 //   }
 // };
+
+const comparePass = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ where: { username: req.body.username } });
+
+    req.user = user;
+
+    next();
+  } catch (error) {
+    res.status(500).json()({ message: error.message, error });
+  }
+};
 
 module.exports = {
   hashPass,
