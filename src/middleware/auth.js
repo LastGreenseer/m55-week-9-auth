@@ -44,13 +44,26 @@ const hashPass = async (req, res, next) => {
 
 const comparePass = async (req, res, next) => {
   try {
+    // get user from database
     const user = await User.findOne({ where: { username: req.body.username } });
 
+    //check if user exists
+    if (!user) {
+        return res.status(404).json({ message: "user not found" })
+    }
+
+    // compare the passwords returning aa fail if false
+    const match = await bcrypt.compare(req.body.password, user.password)
+    if (!match) {
+        return res.status(400).json({ message: "Invalid password" });
+    }
+
+    // attach user to request
     req.user = user;
 
     next();
   } catch (error) {
-    res.status(500).json()({ message: error.message, error });
+    res.status(500).json({ message: error.message, error });
   }
 };
 
