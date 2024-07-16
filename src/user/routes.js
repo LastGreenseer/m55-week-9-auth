@@ -2,7 +2,7 @@ const { Router } = require("express");
 const userRouter = Router();
 
 const { registerUser } = require("./controllers");
-const { hashPass } = require("../middleware/auth");
+const { hashPass, comparePass } = require("../middleware/auth");
 
 userRouter.post("/registerUser", hashPass, registerUser);
 
