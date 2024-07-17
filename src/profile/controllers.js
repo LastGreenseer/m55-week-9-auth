@@ -1,7 +1,8 @@
 const Profile = require("./model");
 const User = require("../user/model");
 
-const addProfile = async (req, res) => {
+// this needs to be refactored so a user can create a profile, and that they will have a token giving them access to it
+const createProfile = async (req, res) => {
   try {
     const profile = await Profile.create(req.body);
 
@@ -12,5 +13,5 @@ const addProfile = async (req, res) => {
 };
 
 module.exports = {
-    addProfile,
+    createProfile,
 }

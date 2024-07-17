@@ -1,8 +1,8 @@
 const { Router } = require("express");
 const profileRouter = Router();
 
-const { addProfile } = require("./controllers");
+const { createProfile } = require("./controllers");
 
-profileRouter.post("/addProfile", addProfile);
+profileRouter.post("/addProfile", createProfile);
 
 module.exports = profileRouter;
