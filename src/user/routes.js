@@ -7,6 +7,7 @@ const {
   login,
   getUserByUsername,
   getAllUsers,
+  removeUser,
 } = require("./controllers");
 
 //these provide added security
@@ -20,5 +21,7 @@ userRouter.post("/login", comparePass, login);
 userRouter.get("/getUser/:username", getUserByUsername);
 
 userRouter.get("/getAllUsers", getAllUsers);
+
+userRouter.delete("/removeUser", removeUser);
 
 module.exports = userRouter;

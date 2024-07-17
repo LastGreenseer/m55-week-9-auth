@@ -58,9 +58,29 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+//delete user by username
+const removeUser = async (req, res) => {
+  const { username } = req.body;
+
+  try {
+    const deleted = await User.destroy({
+      where: { username: username },
+    });
+
+    if (!deleted) {
+      return res.status(404).json({ message: "user not found" });
+    }
+
+    res.status(200).json({ message: "success" });
+  } catch (error) {
+    res.status(500).json({ message: error.message, error: error });
+  }
+};
+
 module.exports = {
   registerUser: registerUser,
   login: login,
   getUserByUsername: getUserByUsername,
   getAllUsers: getAllUsers,
+  removeUser: removeUser,
 };
