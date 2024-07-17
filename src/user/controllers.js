@@ -77,10 +77,25 @@ const removeUser = async (req, res) => {
   }
 };
 
+//delete all users
+const removeAllUsers = async (req, res) => {
+  try {
+    await User.destroy({
+      where: {},
+      truncate: true,
+    });
+
+    res.status(200).json({ message: "success" });
+  } catch (error) {
+    res.status(500).json({ message: error.message, error: error });
+  }
+};
+
 module.exports = {
   registerUser: registerUser,
   login: login,
   getUserByUsername: getUserByUsername,
   getAllUsers: getAllUsers,
   removeUser: removeUser,
+  removeAllUsers: removeAllUsers,
 };

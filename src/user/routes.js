@@ -8,6 +8,7 @@ const {
   getUserByUsername,
   getAllUsers,
   removeUser,
+  removeAllUsers,
 } = require("./controllers");
 
 //these provide added security
@@ -23,5 +24,7 @@ userRouter.get("/getUser/:username", getUserByUsername);
 userRouter.get("/getAllUsers", getAllUsers);
 
 userRouter.delete("/removeUser", removeUser);
+
+userRouter.delete("/removeAllUsers", removeAllUsers);
 
 module.exports = userRouter;
