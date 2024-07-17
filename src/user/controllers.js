@@ -47,8 +47,20 @@ const getUserByUsername = async (req, res) => {
   }
 };
 
+//get all users
+const getAllUsers = async (req, res) => {
+  try {
+    const user = await User.findAll();
+
+    res.status(201).json({ message: "success", user: user });
+  } catch (error) {
+    res.status(501).json({ message: error.message, error: error });
+  }
+};
+
 module.exports = {
   registerUser: registerUser,
   login: login,
   getUserByUsername: getUserByUsername,
+  getAllUsers: getAllUsers,
 };
