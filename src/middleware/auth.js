@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const User = require("../user/model")
+const User = require("../user/model");
 // const saltRounds = +process.env.SALT_ROUNDS;
 
 const saltRounds = parseInt(process.env.SALT_ROUNDS);
@@ -18,11 +18,6 @@ const hashPass = async (req, res, next) => {
   }
 };
 
-// const comparePass = (req, res, next) => {
-//   const { username, password } = req.body;
-
-//   bcrypt.compare takes 2 parameters, the plaintext password and the hashed password from the db
-
 // //   get user from db with username
 // //   check if user exists
 // //   compare password
@@ -31,17 +26,6 @@ const hashPass = async (req, res, next) => {
 // //   attach user to the request
 // //   next
 
-//   try {
-//     bcrypt.compare(password, hashedPassword, (err, result) => {
-//       if (!password) {
-//         return res.status(400).json({ message: "Password does not match" });
-//       }
-//     });
-//   } catch (error) {
-//     res.status(500).json()({ message: error.message, error });
-//   }
-// };
-
 const comparePass = async (req, res, next) => {
   try {
     // get user from database
@@ -49,13 +33,13 @@ const comparePass = async (req, res, next) => {
 
     //check if user exists
     if (!user) {
-        return res.status(404).json({ message: "user not found" })
+      return res.status(404).json({ message: "user not found" });
     }
 
     // compare the passwords returning aa fail if false
-    const match = await bcrypt.compare(req.body.password, user.password)
+    const match = await bcrypt.compare(req.body.password, user.password);
     if (!match) {
-        return res.status(400).json({ message: "Invalid password" });
+      return res.status(400).json({ message: "Invalid password" });
     }
 
     // attach user to request
