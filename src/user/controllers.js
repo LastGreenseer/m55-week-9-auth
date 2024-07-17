@@ -29,9 +29,16 @@ const login = async (req, res) => {
 };
 
 const getUserByUsername = async (req, res) => {
+  const username = req.params.username;
+
   try {
     const user = await User.findOne({ where: { username } });
-    return user;
+
+    if (!user) {
+      return res.status(404).json({ message: "user not found" });
+    }
+
+    res.json(user);
   } catch (error) {
     res.status(501).json({ message: error.message, error: error });
   }
@@ -40,4 +47,5 @@ const getUserByUsername = async (req, res) => {
 module.exports = {
   registerUser: registerUser,
   login: login,
+  getUserByUsername: getUserByUsername,
 };
