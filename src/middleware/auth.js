@@ -74,8 +74,13 @@ const verifyToken = async (req, res, next) => {
       return res.status(403).json({ message: "Invalid user data" });
     }
 
-    //if all is in order, the decoded user information is attached to the 'req' object
-    req.user = decoded;
+    //make sure the user exists by checking the database for their id
+    const user = await User.findOne({ where: { id: decoded.id } });
+    if (!user) {
+      return res.status(404).json({ message: "user not recognised" });
+    }
+    //if the token exists, contains an id and that id matches the database, attach the user information to the body
+    req.authCheck = user;
 
     next();
   } catch (error) {
