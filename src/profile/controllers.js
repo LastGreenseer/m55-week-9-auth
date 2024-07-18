@@ -1,10 +1,19 @@
 const Profile = require("./model");
 const User = require("../user/model");
+const jwt = require("jsonwebtoken");
 
 // this needs to be refactored so a user can create a profile, and that they will have a token giving them access to it
 const createProfile = async (req, res) => {
   try {
-    const profile = await Profile.create(req.body);
+    //verify the token
+    //.split will break the 'Authorization' header string into an array allowing the token to be extracted
+    const token = req.headers.authorization?.split(" ")[1]; // index 0 in the array will be "Bearer" and index 1 will be the actual token
+    const decoded = jwt.verify(token, process.env.SECRET);
+
+    //extract userId from decoded token
+    const userId = decoded.id;
+
+    const profile = await Profile.create({ userId, ...req.body});
 
     res.status(201).json({ message: "success", profile: profile });
   } catch (error) {
@@ -13,5 +22,5 @@ const createProfile = async (req, res) => {
 };
 
 module.exports = {
-    createProfile,
-}
+  createProfile,
+};
