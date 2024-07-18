@@ -53,10 +53,19 @@ const comparePass = async (req, res, next) => {
 };
 
 const verifyToken = async (req, res, next) => {
+  
+  try {
+    const token = req.header("Authorization")
+    console.log (token)
+    next()
+  } catch (error) {
+  res.status(500).json({ message: error.message, error });  
+  }
 
 }
 
 module.exports = {
   hashPass,
   comparePass,
+  verifyToken,
 };

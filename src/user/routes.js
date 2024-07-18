@@ -12,7 +12,7 @@ const {
 } = require("./controllers");
 
 //these provide added security
-const { hashPass, comparePass } = require("../middleware/auth");
+const { hashPass, comparePass, verifyToken } = require("../middleware/auth");
 
 //routes
 userRouter.post("/registerUser", hashPass, registerUser);
@@ -21,7 +21,7 @@ userRouter.post("/login", comparePass, login);
 
 userRouter.get("/getUser/:username", getUserByUsername);
 
-userRouter.get("/getAllUsers", getAllUsers);
+userRouter.get("/getAllUsers", verifyToken, getAllUsers);
 
 userRouter.delete("/removeUser", removeUser);
 
