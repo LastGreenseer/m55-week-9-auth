@@ -1,5 +1,8 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const User = require("../user/model");
+
+const SECRET_KEY = process.env.SECRET;
 // const saltRounds = +process.env.SALT_ROUNDS;
 
 const saltRounds = parseInt(process.env.SALT_ROUNDS);
@@ -36,7 +39,7 @@ const comparePass = async (req, res, next) => {
       return res.status(404).json({ message: "user not found" });
     }
 
-    // compare the passwords returning aa fail if false
+    // compare the passwords returning a fail if false
     const match = await bcrypt.compare(req.body.password, user.password);
     if (!match) {
       return res.status(400).json({ message: "Invalid password" });
@@ -51,7 +54,31 @@ const comparePass = async (req, res, next) => {
   }
 };
 
+const verifyToken = async (req, res, next) => {
+  try {
+    const token = req.header("Authorization");
+    console.log(token);
+
+    if (!token) {
+      return res.status(403).json({ message: "Unauthorized access!" });
+    }
+
+    const decoded = jwt.verify(token, SECRET_KEY);
+
+    if (!decoded.id) {
+      return res.status(403).json({ message: "Invalid user data" });
+    }
+
+    req.user = decoded;
+
+    next();
+  } catch (error) {
+    res.status(500).json({ message: error.message, error });
+  }
+};
+
 module.exports = {
   hashPass,
   comparePass,
+  verifyToken,
 };
