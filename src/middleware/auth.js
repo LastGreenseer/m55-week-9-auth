@@ -56,20 +56,31 @@ const comparePass = async (req, res, next) => {
 
 const verifyToken = async (req, res, next) => {
   try {
+    //retrieve authorization information from "Authorization" header
     const token = req.header("Authorization");
     console.log(token);
 
+    //if the token is not found, the user is trying to access a protected route without authorization
     if (!token) {
       return res.status(403).json({ message: "Unauthorized access!" });
     }
 
+    //otherwise we use .verify from JWT library to check the token's validity
+    //if valid, 'decoded' will contain the decoded payload, including the ID
     const decoded = jwt.verify(token, SECRET_KEY);
 
+    //check the payload for the 'Id' field
     if (!decoded.id) {
       return res.status(403).json({ message: "Invalid user data" });
     }
 
-    req.user = decoded;
+    //make sure the user exists by checking the database for their id
+    const user = await User.findOne({ where: { id: decoded.id } });
+    if (!user) {
+      return res.status(404).json({ message: "user not recognised" });
+    }
+    //if the token exists, contains an id and that id matches the database, attach the user information to the body
+    req.authCheck = user;
 
     next();
   } catch (error) {

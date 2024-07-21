@@ -5,10 +5,12 @@ const sequelize = require("./connection");
 User.hasOne(Profile, { foreignKey: "userId" });
 Profile.belongsTo(User, { foreignKey: "userId" });
 
-//automatically create and update tables based on models to prevent a missmatch with the database
+//automatically create and update tables based on models
+// this will prevent a missmatch with the database
 async () => {
   try {
-    await sequelize.sync({ alter: true }); //updates the table without dropping them
+    //updates the table without dropping them
+    await sequelize.sync({ alter: true }); 
     console.log("synchronization successful");
   } catch (error) {
     console.error("error synchronizing database", error);
