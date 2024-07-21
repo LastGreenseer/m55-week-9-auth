@@ -30,7 +30,7 @@ const createProfile = async (req, res) => {
       ...req.body,
     });
 
-    const token = jwy.sign({ id: userId }, process.env.SECRET);
+    const token = jwt.sign({ id: userId }, process.env.SECRET);
 
     res.status(201).json({ message: "Profile created", profile, token });
   } catch (error) {
