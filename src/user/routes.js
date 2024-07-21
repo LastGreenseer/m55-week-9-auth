@@ -9,6 +9,7 @@ const {
   getAllUsers,
   removeUser,
   removeAllUsers,
+  updateEmail,
 } = require("./controllers");
 
 //these provide added security
@@ -26,5 +27,7 @@ userRouter.get("/getAllUsers", verifyToken, getAllUsers);
 userRouter.delete("/removeUser", removeUser);
 
 userRouter.delete("/removeAllUsers", removeAllUsers);
+
+userRouter.put("/updateEmail/:username", updateEmail);
 
 module.exports = userRouter;

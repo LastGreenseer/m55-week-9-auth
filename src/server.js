@@ -1,30 +1,31 @@
-const { Router } = require("express");
-const userRouter = Router();
+require("dotenv").config();
 
-//these are the CRUD functions
-const {
-  registerUser,
-  login,
-  getUserByUsername,
-  getAllUsers,
-  removeUser,
-  removeAllUsers,
-} = require("./controllers");
+const express = require("express");
 
-//these provide added security
-const { hashPass, comparePass, verifyToken } = require("../middleware/auth");
+const User = require("./user/model");
 
-//routes
-userRouter.post("/registerUser", hashPass, registerUser);
+const testRouter = require("./test/routes");
+const userRouter = require("./user/routes");
 
-userRouter.post("/login", comparePass, login);
+const port = process.env.PORT || 5001;
 
-userRouter.get("/getUser/:username", getUserByUsername);
+const app = express();
 
-userRouter.get("/getAllUsers", verifyToken, getAllUsers);
+const syncTables = () => {
+  User.sync();
+};
 
-userRouter.delete("/removeUser", removeUser);
+app.use(express.json());
 
-userRouter.delete("/removeAllUsers", removeAllUsers);
+app.use("/test", testRouter);
 
-module.exports = userRouter;
+app.use("/user", userRouter);
+
+app.get("/health", (req, res) => {
+  res.status(200).json({ message: "API is healthy" });
+});
+
+app.listen(port, () => {
+  syncTables();
+  console.log(`Server is listening on port ${port}`);
+});
